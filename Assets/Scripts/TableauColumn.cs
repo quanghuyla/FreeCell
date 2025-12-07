@@ -4,12 +4,15 @@ using UnityEngine;
 public class TableauColumn : MonoBehaviour, ICardContainer
 {
     public List<Card> cards = new List<Card>();
-    public float cardSpacing = 25f; // Spacing between cards
+    public float cardSpacing = 35f;
     
     public void AddCard(Card card)
     {
         cards.Add(card);
-        card.transform.SetParent(transform);
+        card.transform.SetParent(transform, false);
+
+        card.transform.SetAsLastSibling();
+
         UpdateCardPositions();
     }
     
@@ -19,17 +22,14 @@ public class TableauColumn : MonoBehaviour, ICardContainer
         UpdateCardPositions();
     }
     
-    void UpdateCardPositions()
+    public void UpdateCardPositions()
     {
         for (int i = 0; i < cards.Count; i++)
         {
             RectTransform rectTransform = cards[i].GetComponent<RectTransform>();
             if (rectTransform != null)
             {
-                // Position cards vertically with spacing
                 rectTransform.anchoredPosition = new Vector2(0, -i * cardSpacing);
-                
-                // Set proper layering (later cards appear on top)
                 rectTransform.SetSiblingIndex(i);
             }
         }
@@ -37,10 +37,9 @@ public class TableauColumn : MonoBehaviour, ICardContainer
     
     public bool CanPlaceCard(Card card)
     {
-        if (cards.Count == 0) return true; // Empty column accepts any card
-        
+        if (cards.Count == 0) return true;
+
         Card topCard = cards[cards.Count - 1];
-        // Must be alternating colors and descending rank
         return topCard.IsRed() != card.IsRed() && 
                topCard.GetRankValue() == card.GetRankValue() + 1;
     }

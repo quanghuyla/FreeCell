@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class UIManager : MonoBehaviour
     public GameObject winPanel;
     public Button newGameButton;
     public Button playAgainButton;
+    public Button restartButton;
+    public Button mainMenuButton;
+    public Button undoButton;
+    public Button redoButton;
     
     void Awake()
     {
@@ -32,9 +37,65 @@ public class UIManager : MonoBehaviour
         
         if (playAgainButton != null)
         {
-            playAgainButton.onClick.AddListener(() => {
-                winPanel.SetActive(false);
+            playAgainButton.onClick.AddListener(() =>
+            {
+                HideWinPanel();
                 GameManager.Instance.NewGame();
+            });
+        }
+
+        if (newGameButton != null)
+        {
+            newGameButton.onClick.AddListener(() =>
+            {
+                HideWinPanel();
+                GameManager.Instance.NewGame();
+            });
+        }
+
+        if (restartButton != null)
+        {
+            restartButton.onClick.AddListener(() =>
+            {
+                HideWinPanel();
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.RestartRound();
+                }
+                else
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
+            });
+        }
+
+        if (mainMenuButton != null)
+        {
+            mainMenuButton.onClick.AddListener(() =>
+            {
+                SceneManager.LoadScene("MainMenu");
+            });
+        }
+
+        if (undoButton != null)
+        {
+            undoButton.onClick.AddListener(() =>
+            {
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.UndoMove();
+                }
+            });
+        }
+
+        if (redoButton != null)
+        {
+            redoButton.onClick.AddListener(() =>
+            {
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.RedoMove();
+                }
             });
         }
     }
@@ -57,6 +118,14 @@ public class UIManager : MonoBehaviour
             {
                 winText.text = "You Win!\nMoves: " + moves;
             }
+        }
+    }
+
+    public void HideWinPanel()
+    {
+        if (winPanel != null)
+        {
+            winPanel.SetActive(false);
         }
     }
 }

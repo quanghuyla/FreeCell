@@ -14,9 +14,8 @@ public class Foundation : MonoBehaviour, ICardContainer
         }
         
         cards.Add(card);
-        card.transform.SetParent(transform);
+        card.transform.SetParent(transform, false);
         
-        // Position card at center of foundation
         RectTransform rectTransform = card.GetComponent<RectTransform>();
         if (rectTransform != null)
         {
@@ -31,13 +30,11 @@ public class Foundation : MonoBehaviour, ICardContainer
     
     public bool CanPlaceCard(Card card)
     {
-        // First card must be an Ace
         if (cards.Count == 0)
         {
             return card.rank == Card.Rank.Ace;
         }
-        
-        // Must match suit and be next rank
+
         Card topCard = cards[cards.Count - 1];
         return card.suit == topCard.suit && 
                card.GetRankValue() == topCard.GetRankValue() + 1;

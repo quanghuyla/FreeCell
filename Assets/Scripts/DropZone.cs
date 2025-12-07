@@ -12,7 +12,6 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     
     void Start()
     {
-        // Get existing Image component instead of adding a new one
         highlightImage = GetComponent<Image>();
         
         if (highlightImage != null)
@@ -23,18 +22,32 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Highlight when dragging over
         if (eventData.pointerDrag != null && highlightImage != null)
         {
-            highlightImage.color = new Color(1, 1, 0, 0.5f); // Yellow highlight
+            highlightImage.color = new Color(1, 1, 0, 0.5f);
+
+            DragDrop dragDrop = eventData.pointerDrag.GetComponent<DragDrop>();
+            if (dragDrop != null)
+            {
+                dragDrop.SetDropZone(this);
+            }
         }
     }
-    
+
     public void OnPointerExit(PointerEventData eventData)
     {
         if (highlightImage != null)
         {
-            highlightImage.color = originalColor; // Restore original color
+            highlightImage.color = originalColor;
+        }
+
+        if (eventData.pointerDrag != null)
+        {
+            DragDrop dragDrop = eventData.pointerDrag.GetComponent<DragDrop>();
+            if (dragDrop != null)
+            {
+                dragDrop.SetDropZone(null);
+            }
         }
     }
     
@@ -42,7 +55,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     {
         if (highlightImage != null)
         {
-            highlightImage.color = originalColor; // Restore original color
+            highlightImage.color = originalColor;
         }
         
         DragDrop draggable = eventData.pointerDrag.GetComponent<DragDrop>();

@@ -54,16 +54,23 @@ public class Card : MonoBehaviour
     
     public void UpdateVisuals()
     {
-        // Update the card's visual appearance
         Image cardImage = GetComponent<Image>();
         if (cardImage != null)
         {
             cardImage.color = Color.white;
         }
-        
-        // Update text using TextMeshPro
+
+        Outline outline = GetComponent<Outline>();
+        if (outline == null)
+        {
+            outline = gameObject.AddComponent<Outline>();
+        }
+        outline.effectColor = Color.black;
+        outline.effectDistance = new Vector2(3, -3);
+        outline.useGraphicAlpha = true;
+
         TextMeshProUGUI tmpText = GetComponentInChildren<TextMeshProUGUI>();
-        
+
         if (tmpText != null)
         {
             tmpText.text = GetDisplayString();

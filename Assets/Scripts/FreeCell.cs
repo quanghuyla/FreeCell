@@ -4,15 +4,15 @@ public class FreeCell : MonoBehaviour, ICardContainer
 {
     public Card card = null;
     
-    public bool CanPlaceCard(Card newCard)  // Keep the parameter for interface consistency
+    public bool CanPlaceCard(Card newCard)
     {
-        return card == null;  // We just check if the cell is empty
+        return card == null;
     }
     
     public void AddCard(Card newCard)
     {
         card = newCard;
-        card.transform.SetParent(transform);
+        card.transform.SetParent(transform, false);
         card.transform.localPosition = Vector3.zero;
     }
     

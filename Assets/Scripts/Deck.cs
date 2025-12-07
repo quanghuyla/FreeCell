@@ -8,12 +8,10 @@ public class Deck : MonoBehaviour
     
     public void CreateDeck()
     {
-        Debug.Log("=== CreateDeck() START ===");
         cards.Clear();
-        
+
         if (cardPrefab == null)
         {
-            Debug.LogError("CardPrefab is NULL!");
             return;
         }
         
@@ -21,12 +19,8 @@ public class Deck : MonoBehaviour
         
         if (cardParent == null)
         {
-            Debug.LogError("CardParent not found!");
             return;
         }
-        
-        Debug.Log($"Creating cards under: {cardParent.name}");
-        Debug.Log($"CardParent children before: {cardParent.childCount}");
         
         int cardIndex = 0;
         foreach (Card.Suit suit in System.Enum.GetValues(typeof(Card.Suit)))
@@ -37,22 +31,19 @@ public class Deck : MonoBehaviour
                 
                 if (cardObj == null)
                 {
-                    Debug.LogError($"Failed to instantiate card {rank} of {suit}");
                     continue;
                 }
                 
-                // Set a visible position for debugging
                 RectTransform rectTransform = cardObj.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    rectTransform.anchoredPosition = Vector2.zero; // Center position
+                    rectTransform.anchoredPosition = Vector2.zero;
                 }
                 
                 Card card = cardObj.GetComponent<Card>();
                 
                 if (card == null)
                 {
-                    Debug.LogError($"Card component missing on {cardObj.name}");
                     Destroy(cardObj);
                     continue;
                 }
@@ -65,9 +56,6 @@ public class Deck : MonoBehaviour
             }
         }
         
-        Debug.Log($"CardParent children after: {cardParent.childCount}");
-        Debug.Log($"Total cards created: {cards.Count}");
-        Debug.Log("=== CreateDeck() END ===");
     }
     
     public void Shuffle()
