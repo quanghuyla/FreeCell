@@ -55,9 +55,14 @@ public class Card : MonoBehaviour
     public void UpdateVisuals()
     {
         Image cardImage = GetComponent<Image>();
-        if (cardImage != null)
+        if (cardImage != null && CardSpriteManager.Instance != null)
         {
-            cardImage.color = Color.white;
+            Sprite cardSprite = CardSpriteManager.Instance.GetCardSprite(suit, rank);
+            if (cardSprite != null)
+            {
+                cardImage.sprite = cardSprite;
+                cardImage.color = Color.white;
+            }
         }
 
         Outline outline = GetComponent<Outline>();
@@ -65,16 +70,14 @@ public class Card : MonoBehaviour
         {
             outline = gameObject.AddComponent<Outline>();
         }
-        outline.effectColor = Color.black;
-        outline.effectDistance = new Vector2(3, -3);
+        outline.effectColor = new Color(0.2f, 0.2f, 0.2f, 1f);
+        outline.effectDistance = new Vector2(2, -2);
         outline.useGraphicAlpha = true;
 
         TextMeshProUGUI tmpText = GetComponentInChildren<TextMeshProUGUI>();
-
         if (tmpText != null)
         {
-            tmpText.text = GetDisplayString();
-            tmpText.color = GetColor();
+            Destroy(tmpText.gameObject);
         }
     }
 }
