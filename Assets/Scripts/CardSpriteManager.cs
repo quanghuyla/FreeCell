@@ -1,16 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class CardSpriteManager : MonoBehaviour
 {
     public static CardSpriteManager Instance;
-
-    [Header("Card Sprites Folder Path")]
-    [Tooltip("Path to card sprites folder in Assets")]
-    public string cardSpritesPath = "Assets/Sprites/Playing Cards/Playing Cards/PNG-cards-1.3";
 
     private Dictionary<string, Sprite> cardSprites = new Dictionary<string, Sprite>();
 
@@ -29,23 +22,12 @@ public class CardSpriteManager : MonoBehaviour
 
     void LoadAllCardSprites()
     {
-#if UNITY_EDITOR
-        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { cardSpritesPath });
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Cards");
 
-        foreach (string guid in guids)
+        foreach (Sprite sprite in sprites)
         {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            Object[] sprites = AssetDatabase.LoadAllAssetsAtPath(assetPath);
-
-            foreach (Object obj in sprites)
-            {
-                if (obj is Sprite sprite)
-                {
-                    cardSprites[sprite.name] = sprite;
-                }
-            }
+            cardSprites[sprite.name] = sprite;
         }
-#endif
     }
 
     public Sprite GetCardSprite(Card.Suit suit, Card.Rank rank)
